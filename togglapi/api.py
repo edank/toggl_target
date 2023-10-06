@@ -20,17 +20,19 @@ class TogglAPI(object):
         and parameters defined by key/pair values in the paramas dict.
         Default section is "time_entries" which evaluates to "time_entries.json"
 
+        Souce: https://developers.track.toggl.com/docs/api/time_entries/index.html
+
         >>> t = TogglAPI('_SECRET_TOGGLE_API_TOKEN_')
         >>> t._make_url(section='time_entries', params = {})
-        'https://www.toggl.com/api/v8/time_entries'
+        'https://api.track.toggl.com/api/v9/me/time_entries'
 
         >>> t = TogglAPI('_SECRET_TOGGLE_API_TOKEN_')
         >>> t._make_url(section='time_entries', 
-                        params = {'start_date': '2010-02-05T15:42:46+02:00', 'end_date': '2010-02-12T15:42:46+02:00'})
+                params = {'start_date': '2010-02-05T15:42:46+02:00', 'end_date': '2010-02-12T15:42:46+02:00'})
         'https://www.toggl.com/api/v8/time_entries?start_date=2010-02-05T15%3A42%3A46%2B02%3A00%2B02%3A00&end_date=2010-02-12T15%3A42%3A46%2B02%3A00%2B02%3A00'
         """
 
-        url = 'https://www.toggl.com/api/v8/{}'.format(section)
+        url = 'https://api.toggl.com/api/v9/me/{}'.format(section)
         if len(params) > 0:
             url = url + '?{}'.format(urlencode(params))
         return url
@@ -55,6 +57,7 @@ class TogglAPI(object):
         url = self._make_url(section='time_entries',
                              params={'start_date': start_date + self.timezone, 'end_date': end_date + self.timezone})
         r = self._query(url=url, method='GET')
+
         return r.json()
 
     def get_hours_tracked(self, start_date, end_date):

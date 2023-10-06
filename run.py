@@ -96,11 +96,13 @@ def main():
         sys.exit()
     print("Internet seems fine!")
     print("\nTrying to connect to Toggl, hang on!\n")
+    
     try:
         t.achieved_hours = a.get_hours_tracked(start_date=w.month_start, end_date=w.now)
-    except:
+    except Exception as e:
         print("OMG! Toggle request failed for some mysterious reason!")
         print("Good Bye Cruel World!")
+        print(f"Error: {e}")
         sys.exit()
 
     t.required_hours = w.required_hours_this_month
@@ -110,12 +112,12 @@ def main():
 
     print("So far this month, you have tracked", )
     print(hilite("{0:.2f} hours".format(t.achieved_hours), True, True))
-    print("\nBusiness days left till deadline : {}".format(w.business_days_left_count))
-    print("Total days left till deadline : {}".format(w.days_left_count))
+    print("\nBusiness days left: {}".format(w.business_days_left_count))
+    print("Total days left: {}".format(w.days_left_count))
     print("\nThis month targets [Required (minimum)] : {} ({})".format(w.required_hours_this_month,
                                                                        w.required_hours_this_month - (
                                                                                w.required_hours_this_month * config.TOLERANCE_PERCENTAGE)))
-    print("\nTo achieve the minimum:\n\tyou should log {0:.2f} hours every business day".format(normal_min_hours))
+    print("\nTo achieve the MINIMUM:\n\tyou should log {0:.2f} hours every business day".format(normal_min_hours))
     print("\tor log {0:.2f} hours every day".format(crunch_min_hours))
     print("\tleft is : {0:.2f}".format(
         (w.required_hours_this_month - (w.required_hours_this_month * config.TOLERANCE_PERCENTAGE)) - t.achieved_hours))
@@ -124,7 +126,7 @@ def main():
                                                                               w.days_left_count)
 
     print(
-        "\nTo achieve the required :\n\tyou should log {0:.2f} hours every business day".format(normal_required_hours))
+        "\nTo achieve the REQUIRED :\n\tyou should log {0:.2f} hours every business day".format(normal_required_hours))
     print("\tor log {0:.2f} hours every day".format(crunch_required_hours))
     print("\tleft is : {0:.2f}".format(w.required_hours_this_month - t.achieved_hours))
     print("\nHow your progress looks:")
